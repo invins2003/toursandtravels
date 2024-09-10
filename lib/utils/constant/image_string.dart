@@ -1,0 +1,4 @@
+class TImage{
+  TImage._();
+  
+}

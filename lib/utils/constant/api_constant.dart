@@ -1,0 +1,4 @@
+class ApiConstant{
+  ApiConstant._();
+  
+}
