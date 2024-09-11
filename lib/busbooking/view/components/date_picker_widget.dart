@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+
 class DatePickerWidget extends StatefulWidget {
   final bool isRoundTrip;
 
@@ -67,7 +68,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
                       _selectedDate == null
                           ? 'Select Date'
                           : DateFormat('yyyy-MM-dd').format(_selectedDate!),
-                      style: TextStyle(fontSize: 16),
+                      style: TextStyle(fontSize: 16,fontStyle: Theme.of(context).textTheme.displaySmall?.fontStyle),
                     ),
                   ],
                 ),
@@ -97,7 +98,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
                         _returnDate == null
                             ? 'Select Return Date'
                             : DateFormat('yyyy-MM-dd').format(_returnDate!),
-                        style: TextStyle(fontSize: 16),
+                        style: Theme.of(context).textTheme.bodyLarge,
                       ),
                     ],
                   ),

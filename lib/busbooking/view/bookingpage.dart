@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:toursandtravels/busbooking/view/components/date_picker_widget.dart';
+import 'package:toursandtravels/busbooking/view/components/passengercount.dart';
 import 'package:toursandtravels/busbooking/view/components/to_from.dart';
+import 'package:toursandtravels/busbooking/view/searchtripspage.dart';
 import 'package:toursandtravels/utils/constant/colors.dart'; // Import the new widget
 
 class BookingPage extends StatefulWidget {
@@ -120,8 +122,34 @@ class _BookingPageState extends State<BookingPage> {
                 ),
               ),
               ToFromDropdownWidget(),
-              SizedBox(height: 20,),
-              DatePickerWidget(isRoundTrip: !tripType), // Use the new widget
+              const SizedBox(height: 20,),
+              DatePickerWidget(isRoundTrip: !tripType), 
+              const SizedBox(height: 20,),
+              PassengerCounter(), // Use the new widget
+              const SizedBox(height: 20), // Add spacing before the button
+              Center(
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SearchTripsPage()),
+              );
+                    print('Search for Trips button pressed');
+                  },
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(32),
+                    ), // Use your theme color
+                  ),
+                  child: const Text(
+                    'Search for Trips',
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
