@@ -10,6 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_native_splash: ^2.4.0
+  shared_preferences: ^2.0.15
 
 
 # utility packages
@@ -29,6 +30,7 @@ dependencies:
   # state management
   get: ^4.6.6
   get_storage: ^2.1.1
+  flutter_riverpod: ^1.0.0
 
 dev_dependencies:
   flutter_test:

@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 class HttpClient {
   HttpClient._();
 
-  static const String baseUrl = 'https://api.example.com'; // Replace with your base URL
+  static const String baseUrl = 'https://sainath-backend-4nws.onrender.com'; // Replace with your base URL
 
   static Future<Map<String, dynamic>> get(String endpoint) async {
     final response = await http.get(Uri.parse('$baseUrl$endpoint'));
