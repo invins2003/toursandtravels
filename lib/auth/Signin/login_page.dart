@@ -1,5 +1,9 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:ui'; // For BackdropFilter
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:toursandtravels/auth/Signin/component/loader.dart';
 import 'package:toursandtravels/auth/Signin/viewmodel/loginViewModel.dart';
 import 'package:toursandtravels/auth/signup/Signup.dart';
 import 'package:toursandtravels/routes/bottom_navbar.dart';
@@ -17,6 +21,39 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+
+  // void _showLoader(BuildContext context) {
+  //   showDialog(
+  //     barrierDismissible: false, // Prevent closing by tapping outside
+  //     context: context,
+  //     builder: (context) {
+  //       // ignore: deprecated_member_use
+  //       return WillPopScope(
+  //         onWillPop: () async => false, // Disable back button press
+  //         child: AlertDialog(
+  //           backgroundColor: Colors.transparent, // Transparent background
+  //           elevation: 0,
+  //           content: Stack(
+  //             alignment: Alignment.center,
+  //             children: [
+  //               BackdropFilter(
+  //                 filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+  //                 child: Container(
+  //                   color: Colors.black.withOpacity(0.1),
+  //                 ),
+  //               ),
+  //               const CircularProgressIndicator(),
+  //             ],
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
+
+  // void _hideLoader(BuildContext context) {
+  //   Navigator.pop(context); // Hide loader
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -87,38 +124,49 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       validator: (value) => Validator.validatePassword(value),
                     ),
                     const SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: loginState.isLoading
-                          ? null
-                          : () {
-                              if (_formKey.currentState!.validate()) {
-                                loginNotifier.login(
-                                  _emailController.text,
-                                  _passwordController.text,
-                                ).then((_) {
-                                  if (loginState.isLoggedIn) {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (context) => const NavigationMenu()),
-                                    );
-                                  } else if (loginState.errorMessage != null) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(content: Text(loginState.errorMessage!)),
-                                    );
-                                  }
-                                });
-                              }
-                            },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
-                        padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                        ),
-                        textStyle: TextStyle(fontSize: isTablet ? 18 : 14),
-                      ),
-                      child: const Text('Login'),
-                    ),
+                   ElevatedButton(
+  onPressed: loginState.isLoading
+      ? null
+      : () async {
+          if (_formKey.currentState!.validate()) {
+           Loader.showLoadingDialog(context); // Show loader
+
+            bool loginSuccess = await loginNotifier.login(
+              _emailController.text,
+              _passwordController.text,
+            );
+
+            Loader.hideLoadingDialog(context); // Hide loader when login completes
+
+            if (loginSuccess) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const NavigationMenu()),
+              );
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(loginState.errorMessage ?? 'Login failed')),
+              );
+            }
+          }
+        },
+  style: ElevatedButton.styleFrom(
+    fixedSize: const Size(400, 50),
+    backgroundColor: Colors.blue,
+    padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(12.0),
+    ),
+    textStyle: TextStyle(fontSize: isTablet ? 18 : 14),
+  ),
+  child: Text(
+    'Login',
+    style: textTheme.bodyMedium?.copyWith(
+      fontSize: isTablet ? 20 : 16,
+    ),
+  ),
+),
+
                     const SizedBox(height: 20),
                     Text(
                       'Or login with',

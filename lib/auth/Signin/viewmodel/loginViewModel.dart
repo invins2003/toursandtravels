@@ -30,21 +30,25 @@ class LoginNotifier extends StateNotifier<LoginState> {
 
   LoginNotifier(this.loginRepository) : super(LoginState());
 
-  Future<void> login(String email, String password) async {
+  Future<bool> login(String email, String password) async {
     state = state.copyWith(isLoading: true);
 
     try {
       final response = await loginRepository.login(email, password);
       if (response.containsKey('token')) {
         state = state.copyWith(isLoggedIn: true, isLoading: false);
+        return true; // Successful login
       } else {
         state = state.copyWith(errorMessage: 'Invalid credentials', isLoading: false);
+        return false; // Login failed
       }
     } catch (e) {
       state = state.copyWith(errorMessage: e.toString(), isLoading: false);
+      return false; // Login failed with error
     }
   }
 }
+
 
 final loginProvider = StateNotifierProvider<LoginNotifier, LoginState>((ref) {
   return LoginNotifier(ref.read(loginRepositoryProvider));

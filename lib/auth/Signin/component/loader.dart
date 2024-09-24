@@ -2,32 +2,45 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 class Loader {
-  // Public method to show the loading dialog
-  static void showLoadingDialog(BuildContext context) {
+  // Public method to show the loading dialog with customizable parameters
+  static void showLoadingDialog(
+    BuildContext context, {
+    String message = 'Loading...',        // Default message
+    double blurIntensity = 5.0,           // Default blur intensity
+    Color backgroundColor = Colors.white, // Default background color
+    Color textColor = Colors.black,       // Default text color
+    Color loaderColor = Colors.blue,      // Default loader color
+    bool barrierDismissible = false,      // Default to non-dismissable
+  }) {
     showDialog(
       context: context,
-      barrierDismissible: false, // Prevent closing by tapping outside
+      barrierDismissible: barrierDismissible, // Optionally allow closing by tapping outside
       builder: (BuildContext context) {
         return Stack(
           children: [
             // Blurred background
             BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+              filter: ImageFilter.blur(sigmaX: blurIntensity, sigmaY: blurIntensity),
               child: Container(color: Colors.black.withOpacity(0.5)),
             ),
             // Loader dialog
             Center(
               child: AlertDialog(
-                backgroundColor: Colors.white,
+                backgroundColor: backgroundColor,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
-                content: const Column(
+                content: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    CircularProgressIndicator(),
-                    SizedBox(height: 15),
-                    Text('Signing In...'),
+                    CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(loaderColor),
+                    ),
+                    const SizedBox(height: 15),
+                    Text(
+                      message,
+                      style: TextStyle(color: textColor),
+                    ),
                   ],
                 ),
               ),
