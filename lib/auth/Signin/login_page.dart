@@ -22,39 +22,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
-  // void _showLoader(BuildContext context) {
-  //   showDialog(
-  //     barrierDismissible: false, // Prevent closing by tapping outside
-  //     context: context,
-  //     builder: (context) {
-  //       // ignore: deprecated_member_use
-  //       return WillPopScope(
-  //         onWillPop: () async => false, // Disable back button press
-  //         child: AlertDialog(
-  //           backgroundColor: Colors.transparent, // Transparent background
-  //           elevation: 0,
-  //           content: Stack(
-  //             alignment: Alignment.center,
-  //             children: [
-  //               BackdropFilter(
-  //                 filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-  //                 child: Container(
-  //                   color: Colors.black.withOpacity(0.1),
-  //                 ),
-  //               ),
-  //               const CircularProgressIndicator(),
-  //             ],
-  //           ),
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
-
-  // void _hideLoader(BuildContext context) {
-  //   Navigator.pop(context); // Hide loader
-  // }
-
   @override
   Widget build(BuildContext context) {
     bool isTablet = DeviceUtil.isTablet(context);
@@ -242,7 +209,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                           onPressed: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => const RegistrationPage()),
+                              MaterialPageRoute(builder: (context) => RegistrationPage()),
                             );
                           },
                           child: Text(
