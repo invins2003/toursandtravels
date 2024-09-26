@@ -1,20 +1,22 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:toursandtravels/auth/signup/email_verification.dart';
 import 'package:toursandtravels/auth/signup/reusables/custom_button.dart';
 import 'package:toursandtravels/auth/signup/reusables/custom_textfields.dart';
 import 'package:toursandtravels/auth/signup/reusables/loadingDialog.dart';
+import 'package:toursandtravels/auth/signup/viewmodel/rgistraionViewModel.dart';
 // import 'package:toursandtravels/home_screen.dart';
 import 'package:toursandtravels/utils/validator/validator.dart';
 
-class RegistrationPage extends StatefulWidget {
+class RegistrationPage extends ConsumerStatefulWidget {
   const RegistrationPage({super.key});
 
   @override
-  State<RegistrationPage> createState() => _RegistrationPageState();
+  ConsumerState<RegistrationPage> createState() => _RegistrationPageState();
 }
 
-class _RegistrationPageState extends State<RegistrationPage> {
+class _RegistrationPageState extends ConsumerState<RegistrationPage> {
   final TextEditingController _firstName = TextEditingController();
   final TextEditingController _lastName = TextEditingController();
   final TextEditingController _emailID = TextEditingController();
@@ -129,38 +131,56 @@ Widget build(BuildContext context) {
 
                       // Sign Up button
                       CustomButton(
-                        text: 'Sign Up',
-                        onPressed: () {
-                          if (_formKey.currentState?.validate() ?? false) {
-                            if (_isAgreed) {
-                              // If the user agreed to the terms
-                              _loader.showLoadingDialog(context); // Show loader
-                              // Simulate a network call or processing
-                              Future.delayed(const Duration(seconds: 3), () {
-                                Navigator.pop(context); // Close the dialog
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => EmailVerificationPage(email: _emailID.text,)),
-                                );
-                              });
-                            } else {
-                              // Show a dialog or snackbar if terms are not agreed
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                      'You must agree to the privacy policy and terms of use.'),
-                                ),
-                              );
-                            }
-                          } else {
-                            print('Form is not valid.');
-                          }
-                        },
-                        borderRadius: 12.0,
-                        fontSize: 18.0,
-                        padding: 14.0,
-                      ),
+  text: 'Sign Up',
+  onPressed: () async {
+    if (_formKey.currentState?.validate() ?? false) {
+      if (_isAgreed) {
+        _loader.showLoadingDialog(context);
+
+        try {
+          // Call registerUser from RegistrationViewModel
+          final success = await ref.read(registrationProvider.notifier).registerUser(
+            firstName: _firstName.text,
+            lastName: _lastName.text,
+            email: _emailID.text,
+            userName: _userName.text,
+            phoneNumber: _phoneNumber.text,
+            password: _password.text,
+          );
+
+          Navigator.pop(context); // Close loader
+
+          if (success) {
+            // Navigate to Email Verification Page
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => EmailVerificationPage(email: _emailID.text),
+              ),
+            );
+          }
+        } catch (e) {
+          Navigator.pop(context); // Close loader
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(e.toString()),
+            ),
+          );
+        }
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('You must agree to the privacy policy and terms of use.'),
+          ),
+        );
+      }
+    }
+  },
+  borderRadius: 12.0,
+  fontSize: 18.0,
+  padding: 14.0,
+),
+
                       const SizedBox(height: 20),
 
                       // "Sign up with" text

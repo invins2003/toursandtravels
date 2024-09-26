@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:toursandtravels/routes/bottom_navbar.dart';
+import 'package:toursandtravels/auth/Signin/login_page.dart';
 import 'package:toursandtravels/utils/theme/theme.dart';
 
 class App extends StatelessWidget {
@@ -12,7 +12,7 @@ class App extends StatelessWidget {
       themeMode: ThemeMode.system,
       theme: TAppTheme.lightTheme,
       darkTheme: TAppTheme.darkTheme,
-       home:  const NavigationMenu(),
+       home:  LoginPage(),
     );
   }
 }
