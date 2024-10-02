@@ -1,6 +1,4 @@
 // ignore_for_file: use_build_context_synchronously
-
-import 'dart:ui'; // For BackdropFilter
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:toursandtravels/auth/Signin/component/loader.dart';
@@ -22,6 +20,14 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
+@override
+void initState() {
+  super.initState();
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    ref.read(loginProvider.notifier).checkLoginStatus();
+  });
+}
+
   @override
   Widget build(BuildContext context) {
     bool isTablet = DeviceUtil.isTablet(context);
@@ -30,6 +36,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
     final loginState = ref.watch(loginProvider);
     final loginNotifier = ref.read(loginProvider.notifier);
+    if (loginState.isLoggedIn) {
+    return const NavigationMenu(); // Redirect to home if logged in
+  }
 
     return Scaffold(
       body: SingleChildScrollView(

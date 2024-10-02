@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-
 class DatePickerWidget extends StatefulWidget {
   final bool isRoundTrip;
 
@@ -40,35 +39,44 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
 
   @override
   Widget build(BuildContext context) {
+    // Get the screen width and height using MediaQuery
+    final mediaQuery = MediaQuery.of(context).size;
+    final screenWidth = mediaQuery.width;
+    final screenHeight = mediaQuery.height;
+
     return Table(
-      columnWidths: const {
-        0: FixedColumnWidth(150),
+      columnWidths: {
+        // Adjust column widths based on screen width
+        0: FixedColumnWidth(screenWidth * 0.4),
         1: FlexColumnWidth(),
       },
-      border: TableBorder.all(color: Colors.grey,borderRadius: BorderRadius.circular(10)),
+      border: TableBorder.all(color: Colors.grey, borderRadius: BorderRadius.circular(10)),
       children: [
         TableRow(
           children: [
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: EdgeInsets.all(screenWidth * 0.04), // Responsive padding
               child: Text(
                 'Date:',
-                style: Theme.of(context).textTheme.bodyLarge,
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: screenWidth * 0.045), // Responsive font size
               ),
             ),
             GestureDetector(
               onTap: () => _selectDate(context, false),
               child: Container(
-                padding: const EdgeInsets.all(16),
+                padding: EdgeInsets.all(screenWidth * 0.04), // Responsive padding
                 child: Row(
                   children: [
-                    Icon(Icons.calendar_today, color: Colors.grey),
-                    const SizedBox(width: 8),
+                    Icon(Icons.calendar_today, color: Colors.grey, size: screenWidth * 0.06), // Responsive icon size
+                    SizedBox(width: screenWidth * 0.02), // Responsive spacing
                     Text(
                       _selectedDate == null
                           ? 'Select Date'
                           : DateFormat('yyyy-MM-dd').format(_selectedDate!),
-                      style: TextStyle(fontSize: 16,fontStyle: Theme.of(context).textTheme.displaySmall?.fontStyle),
+                      style: TextStyle(
+                        fontSize: screenWidth * 0.03, // Responsive font size
+                        fontStyle: Theme.of(context).textTheme.displaySmall?.fontStyle,
+                      ),
                     ),
                   ],
                 ),
@@ -80,25 +88,25 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
           TableRow(
             children: [
               Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: EdgeInsets.all(screenWidth * 0.04), // Responsive padding
                 child: Text(
                   'Return Date:',
-                  style: Theme.of(context).textTheme.bodyLarge,
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: screenWidth * 0.045), // Responsive font size
                 ),
               ),
               GestureDetector(
                 onTap: () => _selectDate(context, true),
                 child: Container(
-                  padding: const EdgeInsets.all(16),
+                  padding: EdgeInsets.all(screenWidth * 0.04), // Responsive padding
                   child: Row(
                     children: [
-                      Icon(Icons.calendar_today, color: Colors.grey),
-                      const SizedBox(width: 8),
+                      Icon(Icons.calendar_today, color: Colors.grey, size: screenWidth * 0.06), // Responsive icon size
+                      SizedBox(width: screenWidth * 0.02), // Responsive spacing
                       Text(
                         _returnDate == null
                             ? 'Select Return Date'
                             : DateFormat('yyyy-MM-dd').format(_returnDate!),
-                        style: Theme.of(context).textTheme.bodyLarge,
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: screenWidth * 0.03), // Responsive font size
                       ),
                     ],
                   ),

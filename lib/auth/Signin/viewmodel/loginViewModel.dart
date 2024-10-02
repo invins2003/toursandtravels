@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toursandtravels/auth/Signin/model/apiService.dart';
 
 class LoginState {
@@ -30,12 +31,26 @@ class LoginNotifier extends StateNotifier<LoginState> {
 
   LoginNotifier(this.loginRepository) : super(LoginState());
 
+  Future<void> checkLoginStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+    
+    if (isLoggedIn) {
+      state = state.copyWith(isLoggedIn: true);
+    }
+  }
+
   Future<bool> login(String email, String password) async {
     state = state.copyWith(isLoading: true);
 
     try {
       final response = await loginRepository.login(email, password);
       if (response.containsKey('token')) {
+        // Store login state in Shared Preferences
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setBool('isLoggedIn', true);
+        await prefs.setString('token', response['token']); // Assuming the response contains a token
+
         state = state.copyWith(isLoggedIn: true, isLoading: false);
         return true; // Successful login
       } else {
@@ -47,10 +62,15 @@ class LoginNotifier extends StateNotifier<LoginState> {
       return false; // Login failed with error
     }
   }
-}
 
+  Future<void> logout() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('isLoggedIn');
+    await prefs.remove('token');
+    state = state.copyWith(isLoggedIn: false);
+  }
+}
 
 final loginProvider = StateNotifierProvider<LoginNotifier, LoginState>((ref) {
   return LoginNotifier(ref.read(loginRepositoryProvider));
 });
-

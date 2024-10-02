@@ -3,7 +3,7 @@ import 'package:toursandtravels/busbooking/view/components/date_picker_widget.da
 import 'package:toursandtravels/busbooking/view/components/passengercount.dart';
 import 'package:toursandtravels/busbooking/view/components/to_from.dart';
 import 'package:toursandtravels/busbooking/view/searchtripspage.dart';
-import 'package:toursandtravels/utils/constant/colors.dart'; // Import the new widget
+import 'package:toursandtravels/utils/constant/colors.dart';
 
 class BookingPage extends StatefulWidget {
   const BookingPage({super.key});
@@ -17,32 +17,42 @@ class _BookingPageState extends State<BookingPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Get the screen width and height using MediaQuery
+    final mediaQuery = MediaQuery.of(context).size;
+    final screenWidth = mediaQuery.width;
+    final screenHeight = mediaQuery.height;
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 40, 20, 20),
+          padding: EdgeInsets.fromLTRB(
+            screenWidth * 0.05,  // Adjust horizontal padding relative to screen width
+            screenHeight * 0.05, // Adjust top padding relative to screen height
+            screenWidth * 0.05,
+            screenHeight * 0.02,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 "Book Tickets for your",
-                style: Theme.of(context).textTheme.displayLarge?.copyWith(fontSize: 26),
+                style: Theme.of(context).textTheme.displayLarge?.copyWith(fontSize: screenWidth * 0.065), // Adjust font size relative to screen width
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: screenHeight * 0.01), // Responsive spacing
               Text(
                 'next trip!',
-                style: Theme.of(context).textTheme.displayLarge?.copyWith(fontSize: 26),
+                style: Theme.of(context).textTheme.displayLarge?.copyWith(fontSize: screenWidth * 0.065), // Adjust font size
               ),
               Center(
                 child: Container(
-                  margin: const EdgeInsets.symmetric(vertical: 32),
-                  height: 50,
-                  width: MediaQuery.of(context).size.width - 120,
+                  margin: EdgeInsets.symmetric(vertical: screenHeight * 0.04), // Responsive margin
+                  height: screenHeight * 0.08,  // Increased container height
+                  width: screenWidth * 0.75,    // Adjust container width
                   decoration: BoxDecoration(
                     color: Colors.grey[200],
                     borderRadius: BorderRadius.circular(32),
                   ),
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.02, vertical: screenHeight * 0.015), // Adjust padding
                   child: Row(
                     children: [
                       Expanded(
@@ -58,22 +68,22 @@ class _BookingPageState extends State<BookingPage> {
                                     color: TColors.primaryDark,
                                     borderRadius: BorderRadius.circular(32),
                                   ),
-                                  child: const Center(
+                                  child: Center(
                                     child: Text(
                                       "One Way",
                                       style: TextStyle(
-                                        fontSize: 16,
+                                        fontSize: screenWidth * 0.045,  // Adjust font size
                                         fontWeight: FontWeight.bold,
                                         color: TColors.primaryLight,
                                       ),
                                     ),
                                   ),
                                 )
-                              : const Center(
+                              : Center(
                                   child: Text(
                                     "One Way",
                                     style: TextStyle(
-                                      fontSize: 16,
+                                      fontSize: screenWidth * 0.045,  // Adjust font size
                                       fontWeight: FontWeight.bold,
                                       color: TColors.primaryDark,
                                     ),
@@ -94,22 +104,22 @@ class _BookingPageState extends State<BookingPage> {
                                     color: TColors.primaryDark,
                                     borderRadius: BorderRadius.circular(32),
                                   ),
-                                  child: const Center(
+                                  child: Center(
                                     child: Text(
                                       "Round Trip",
                                       style: TextStyle(
-                                        fontSize: 16,
+                                        fontSize: screenWidth * 0.045,  // Adjust font size
                                         fontWeight: FontWeight.bold,
                                         color: TColors.primaryLight,
                                       ),
                                     ),
                                   ),
                                 )
-                              : const Center(
+                              : Center(
                                   child: Text(
                                     "Round Trip",
                                     style: TextStyle(
-                                      fontSize: 16,
+                                      fontSize: screenWidth * 0.045,  // Adjust font size
                                       fontWeight: FontWeight.bold,
                                       color: TColors.primaryDark,
                                     ),
@@ -122,30 +132,30 @@ class _BookingPageState extends State<BookingPage> {
                 ),
               ),
               ToFromDropdownWidget(),
-              const SizedBox(height: 20,),
-              DatePickerWidget(isRoundTrip: !tripType), 
-              const SizedBox(height: 20,),
-              PassengerCounter(), // Use the new widget
-              const SizedBox(height: 20), // Add spacing before the button
+              SizedBox(height: screenHeight * 0.05), // Increased responsive spacing
+              DatePickerWidget(isRoundTrip: !tripType),
+              SizedBox(height: screenHeight * 0.05), // Increased responsive spacing
+              PassengerCounter(),
+              SizedBox(height: screenHeight * 0.05), // Increased responsive spacing before the button
               Center(
                 child: ElevatedButton(
                   onPressed: () {
                     Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => SearchTripsPage()),
-              );
+                      context,
+                      MaterialPageRoute(builder: (context) => const SearchTripsPage()),
+                    );
                     print('Search for Trips button pressed');
                   },
                   style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                    padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.12, vertical: screenHeight * 0.015), // Increased padding for the button
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(32),
-                    ), // Use your theme color
+                    ),
                   ),
-                  child: const Text(
+                  child: Text(
                     'Search for Trips',
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: screenWidth * 0.05, // Adjusted font size
                     ),
                   ),
                 ),

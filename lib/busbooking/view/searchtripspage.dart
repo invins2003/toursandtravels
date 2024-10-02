@@ -244,7 +244,7 @@ class BusTripCard extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => SeatSelectionPage()),
+                    MaterialPageRoute(builder: (context) => const BusBookingSelectPage()),
                   );
                 },
                 child: Column(

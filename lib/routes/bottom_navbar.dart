@@ -78,7 +78,7 @@ class _NavigationMenuState extends State<NavigationMenu> {
       body: PageView(
         controller: _pageController,
         onPageChanged: _onPageChanged,
-        children:  [
+        children:  const [
           Center(child: Text('Explore Page')),// Home page
           Center(child: Text('Car Page')),
            HomePage(),
